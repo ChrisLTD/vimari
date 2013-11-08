@@ -218,6 +218,9 @@ function animate(elem,style,unit,from,to,time,prop) {
  * Route window scrolling animations
  */
 function windowScrollTo(style, amount){
+	// Todo:
+	// Add setting and check to see if the user wants smooth scrolling
+	// Add setting for animation speed
 	var currentOffset = document.body[style];
 	animate(document.body, style, "", currentOffset, (currentOffset + amount) , 150, true);
 }
