@@ -42,16 +42,16 @@ var actionMap = {
 		safari.self.tab.dispatchMessage('changeTab', 0); },
 
 	'scrollDown' :
-		function() { window.scrollBy(0, 60); },
+		function() { windowScrollTo("scrollTop", 100); },
 
 	'scrollUp' :
-		function() { window.scrollBy(0, -60); },
+		function() { windowScrollTo("scrollTop", -100); },
 
 	'scrollLeft' :
-		function() { window.scrollBy(-60, 0); },
+		function() { windowScrollTo("scrollLeft", -100); },
 
 	'scrollRight' :
-		function() { window.scrollBy(60, 0); },
+		function() { windowScrollTo("scrollTop", -100); },
 
 	'goBack' :
 		function() { window.history.back(); },
@@ -196,7 +196,31 @@ function isEditable(target) {
 function isEmbed(element) { return ["EMBED", "OBJECT"].indexOf(element.tagName) > 0; }
 
 
+/*
+ * Animation function so we can smoothly scroll
+ */
+function animate(elem,style,unit,from,to,time,prop) {
+  if( !elem) return;
+  var start = new Date().getTime(),
+    timer = setInterval(function() {
+      var step = Math.min(1,(new Date().getTime()-start)/time);
+      if (prop) {
+        elem[style] = (from+step*(to-from))+unit;
+      } else {
+        elem.style[style] = (from+step*(to-from))+unit;
+      }
+      if( step == 1) clearInterval(timer);
+    },15);
+  elem.style[style] = from+unit;
+}
 
+/*
+ * Route window scrolling animations
+ */
+function windowScrollTo(style, amount){
+	var currentOffset = document.body[style];
+	animate(document.body, style, "", currentOffset, (currentOffset + amount) , 150, true);
+}
 
 // ==========================
 // Message handling functions
