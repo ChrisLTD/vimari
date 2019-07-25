@@ -448,7 +448,7 @@
 				CODE_SIGN_ENTITLEMENTS = vimari/vimari.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = SK24TBMYCC;
+				DEVELOPMENT_TEAM = 8G5N6F45D6;
 				INFOPLIST_FILE = vimari/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -468,7 +468,7 @@
 				CODE_SIGN_ENTITLEMENTS = vimari/vimari.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = SK24TBMYCC;
+				DEVELOPMENT_TEAM = 8G5N6F45D6;
 				INFOPLIST_FILE = vimari/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -485,7 +485,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = extension/extension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = SK24TBMYCC;
+				DEVELOPMENT_TEAM = 8G5N6F45D6;
 				INFOPLIST_FILE = extension/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -504,7 +504,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = extension/extension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = SK24TBMYCC;
+				DEVELOPMENT_TEAM = 8G5N6F45D6;
 				INFOPLIST_FILE = extension/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

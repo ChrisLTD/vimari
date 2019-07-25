@@ -1,7 +1,7 @@
 function getSettings() {
     return {
         'modifier': undefined,
-        'excludedUrls': '',
+        'excludedUrls': 'mail.google.com,twitch.tv,github.com,twitter.com,lightsail.aws.amazon.com,console.aws.amazon.com',
 
         'hintToggle': 'f',
         'newTabHintToggle': 'F',

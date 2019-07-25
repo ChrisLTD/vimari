@@ -44,8 +44,8 @@ div.internalVimiumHintMarker {
   left: -1px;
   white-space: nowrap !important;
   overflow: hidden !important;
-  font-size: 11px !important;
-  padding: 2px 3px !important;
+  font-size: 12px !important;
+  padding: 2px 3px 3px !important;
   background-color: #feda31 !important;
   border: 0 !important;
   border-radius: 2px !important;
@@ -54,7 +54,7 @@ div.internalVimiumHintMarker {
 
 div.internalVimiumHintMarker span {
   color: #4a400e;
-  font-family: Helvetica, Arial, sans-serif;
+  font-family : "Helvetica Neue", "Helvetica", "Arial", sans-serif;
   font-weight: bold;
 }
 
