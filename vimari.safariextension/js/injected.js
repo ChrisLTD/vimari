@@ -24,60 +24,64 @@ var topWindow = (window.top === window),
 	linkHintCss = {},
 	extensionActive = true,
 	insertMode = false,
-	shiftKeyToggle = false;
+	shiftKeyToggle = false,
+	hudDuration = 5000;
 
 var actionMap = {
 	'hintToggle' : function() {
-		HUD.show('Link hints mode');
+		HUD.showForDuration('Open link in current tab', hudDuration);
 		activateLinkHintsMode(false, false); },
 
 	'newTabHintToggle' : function() {
-		HUD.show('Link hints mode');
+		HUD.showForDuration('Open link in new tab', hudDuration);
 		activateLinkHintsMode(true, false); },
 
-	'tabForward' : function() {
+	'tabForward': function() {
 		safari.self.tab.dispatchMessage('changeTab', 1); },
 
-	'tabBack'    : function() {
+	'tabBack': function() {
 		safari.self.tab.dispatchMessage('changeTab', 0); },
 
-	'scrollDown' :
+	'scrollDown':
 		function() { window.scrollBy(0, settings.scrollSize); },
 
-	'scrollUp' :
+	'scrollUp':
 		function() { window.scrollBy(0, -settings.scrollSize); },
 
-	'scrollLeft' :
+	'scrollLeft':
 		function() { window.scrollBy(-settings.scrollSize, 0); },
 
-	'scrollRight' :
+	'scrollRight':
 		function() { window.scrollBy(settings.scrollSize, 0); },
 
-	'goBack' :
+	'goBack':
 		function() { window.history.back(); },
 
-	'goForward' :
+	'goForward':
 		function() { window.history.forward(); },
 
-	'reload' :
+	'reload':
 		function() { window.location.reload(); },
 
-	'closeTab'   :
+	'openTab':
+		function() { safari.self.tab.dispatchMessage('openTab'); },
+
+	'closeTab':
 		function() { safari.self.tab.dispatchMessage('closeTab', 0); },
 
-	'closeTabReverse'   :
+	'closeTabReverse':
 		function() { safari.self.tab.dispatchMessage('closeTab', 1); },
 
-	'scrollDownHalfPage' :
+	'scrollDownHalfPage':
 		function() { window.scrollBy(0, window.innerHeight / 2); },
 
-	'scrollUpHalfPage'   :
+	'scrollUpHalfPage':
 		function() { window.scrollBy(0, window.innerHeight / -2); },
 
-	'goToPageBottom'     :
+	'goToPageBottom':
 		function() { window.scrollBy(0, document.body.scrollHeight); },
 
-	'goToPageTop'        :
+	'goToPageTop':
 		function() { window.scrollBy(0, -document.body.scrollHeight); }
 };
 
@@ -94,14 +98,17 @@ Mousetrap.stopCallback = function(e, element, combo) {
 		return false;
 	}
 
-	// stop for input, select, and textarea
-	return element.tagName == 'INPUT' || element.tagName == 'SELECT' || element.tagName == 'TEXTAREA' || (element.contentEditable && element.contentEditable == 'true');
-}
+    var tagName = element.tagName;
+    var contentIsEditable = (element.contentEditable && element.contentEditable === 'true');
+
+    // stop for input, select, and textarea
+    return tagName === 'INPUT' || tagName === 'SELECT' || tagName === 'TEXTAREA' || contentIsEditable;
+};
 
 // Set up key codes to event handlers
 function bindKeyCodesToActions() {
 	// Only add if topWindow... not iframe
-	if (topWindow && isEnabledForUrl() ) {
+	if (topWindow && !isExcludedUrl(settings.excludedUrls, document.URL)) {
 		Mousetrap.reset();
 		Mousetrap.bind('esc', enterNormalMode);
 		Mousetrap.bind('ctrl+[', enterNormalMode);
@@ -162,7 +169,6 @@ function getKeyCode(actionName) {
 }
 
 
-
 /*
  * Adds the given CSS to the page.
  * This function is required by vimium but depracated for vimari as the
@@ -173,21 +179,19 @@ function addCssToPage(css) {
 }
 
 
-
 /*
- * Input or text elements are considered focusable and able to receieve their own keyboard events,
+ * Input or text elements are considered focusable and able to receive their own keyboard events,
  * and will enter enter mode if focused. Also note that the "contentEditable" attribute can be set on
  * any element which makes it a rich text editor, like the notes on jjot.com.
  * Note: we used to discriminate for text-only inputs, but this is not accurate since all input fields
- * can be controlled via the keyboard, particuarlly SELECT combo boxes.
+ * can be controlled via the keyboard, particularly SELECT combo boxes.
  */
 function isEditable(target) {
-	if (target.getAttribute("contentEditable") == "true")
+	if (target.getAttribute("contentEditable") === "true")
 		return true;
 	var focusableInputs = ["input", "textarea", "select", "button"];
 	return focusableInputs.indexOf(target.tagName.toLowerCase()) >= 0;
 }
-
 
 
 /*
@@ -195,8 +199,6 @@ function isEditable(target) {
  * unfocused.
  */
 function isEmbed(element) { return ["EMBED", "OBJECT"].indexOf(element.tagName) > 0; }
-
-
 
 
 // ==========================
@@ -230,7 +232,6 @@ function setSettings(msg) {
  * Enable or disable the extension on this tab
  */
 function setActive(msg) {
-
 	extensionActive = msg;
 	if(msg) {
 		bindKeyCodesToActions();
@@ -239,23 +240,43 @@ function setActive(msg) {
 	}
 }
 
-/*
- * Check to see if the current url is in the blacklist
- */
-function isEnabledForUrl() {
-  var excludedUrls, isEnabled, regexp, url, _i, _len;
-  excludedUrls = settings.excludedUrls.split(",");
-  for (_i = 0, _len = excludedUrls.length; _i < _len; _i++) {
-    url = excludedUrls[_i];
-    regexp = new RegExp("^" + url.replace(/\*/g, ".*") + "$");
-    if (document.URL.match(regexp)) {
-      return false;
+function isExcludedUrl(storedExcludedUrls, currentUrl) {
+	if (!storedExcludedUrls.length) {
+		return false;
+	}
+
+    var excludedUrls, regexp, url, formattedUrl, _i, _len;
+    excludedUrls = storedExcludedUrls.split(",");
+    for (_i = 0, _len = excludedUrls.length; _i < _len; _i++) {
+        url = excludedUrls[_i];
+        formattedUrl = stripProtocolAndWww(url);
+        formattedUrl = formattedUrl.toLowerCase();
+        regexp = new RegExp('((.*)?(' + formattedUrl + ')+(.*))');
+        if (currentUrl.toLowerCase().match(regexp)) {
+            return true;
+        }
     }
+    return false;
+}
+
+// These formations removes the protocol and www so that
+// the regexp can catch less AND more specific excluded
+// domains than the current URL.
+function stripProtocolAndWww(url) {
+  url = url.replace('http://', '');
+  url = url.replace('https://', '');
+  if (url.startsWith('www.')) {
+      url = url.slice(4);
   }
-  return true;
-};
+
+  return url;
+}
 
 // Add event listener
 safari.self.addEventListener("message", handleMessage, false);
 // Retrieve settings
 safari.self.tab.dispatchMessage('getSettings', '');
+
+// Export to make it testable
+window.isExcludedUrl = isExcludedUrl;
+window.stripProtocolAndWww = stripProtocolAndWww;

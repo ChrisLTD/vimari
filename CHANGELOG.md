@@ -1,7 +1,19 @@
-Release Notes
+Changelog
 -------------
 
-**Note, changelog no longer updated :)**
+### 2.0.0 (14/7/2018)
+* vimari now exists as a Safari App Extension, making it compatible with Safari
+  version 12
+
+### 1.13.0 (16/8/2018)
+* New fresh icon
+* Removed shift as default modifier key
+* 't' now opens new tab
+* HUD now looks nicer
+* Open link in new tab now works (bugfix)
+* Excluded URL doesn't need to be exact anymore (bugfix)
+
+### 1.2 - 1.12 skipped
 
 ### 1.1 (31/07/2011)
 * Updated to work with the new version of Safari on lion

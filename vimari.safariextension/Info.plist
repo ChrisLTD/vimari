@@ -5,7 +5,7 @@
 	<key>Author</key>
 	<string>Various</string>
 	<key>Builder Version</key>
-	<string>10600.3.18</string>
+	<string>13605.3.8</string>
 	<key>CFBundleDisplayName</key>
 	<string>vimari</string>
 	<key>CFBundleExecutable</key>
@@ -15,13 +15,13 @@
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.12</string>
+	<string>1.13</string>
 	<key>CFBundleVersion</key>
-	<string>22</string>
+	<string>23</string>
 	<key>Chrome</key>
 	<dict>
 		<key>Global Page</key>
-		<string>global.html</string>
+		<string>html/global.html</string>
 	</dict>
 	<key>Content</key>
 	<dict>
@@ -29,22 +29,22 @@
 		<dict>
 			<key>Start</key>
 			<array>
-				<string>keyboardUtils.js</string>
-				<string>vimium-scripts.js</string>
-				<string>linkHints.js</string>
-				<string>mousetrap.js</string>
-				<string>injected.js</string>
+				<string>js/keyboard-utils.js</string>
+				<string>js/lib/vimium-scripts.js</string>
+				<string>js/link-hints.js</string>
+				<string>js/lib/mousetrap.js</string>
+				<string>js/injected.js</string>
 			</array>
 		</dict>
 		<key>Stylesheets</key>
 		<array>
-			<string>injectedcss.css</string>
+			<string>css/injected.css</string>
 		</array>
 	</dict>
 	<key>Description</key>
-	<string>Vim style shortcuts for safari</string>
+	<string>Vim style shortcuts for Safari</string>
 	<key>DeveloperIdentifier</key>
-	<string>357AUX7M8L</string>
+	<string>SK24TBMYCC</string>
 	<key>ExtensionInfoDictionaryVersion</key>
 	<string>1.0</string>
 	<key>Permissions</key>
